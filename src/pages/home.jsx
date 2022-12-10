@@ -1,35 +1,31 @@
 import Categories from '../components/Categories'
-import Sort, { list } from '../components/Sort'
+import Sort from '../components/Sort'
 import ProductBlock from '../components/ProductBlock'
 import Skeleton from '../components/ProductBlock/Skeleton'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import axios from 'axios'
-// import qs from 'qs'
-// import Pagination from '../components/Pagination'
-// import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../App'
 import { useSelector, useDispatch } from 'react-redux'
 import { setCategoryId, setFilter } from '../redux/slices/filterSlice'
-import { setProducts, fetchProducts } from '../redux/slices/productsSlice'
+import {
+    setProducts,
+    fetchProducts,
+    setLoading,
+} from '../redux/slices/productsSlice'
 
 function Home() {
-    // const navigate = useNavigate()
     const items = useSelector((state) => state.products.items)
     const dispatch = useDispatch()
 
     const categoryId = useSelector((state) => state.filter.categoryId)
     const sort = useSelector((state) => state.filter.sort.sortProperty)
 
+    const loaded = useSelector((state) => state.products.loaded)
+
     const { searchValue } = useContext(AppContext)
-    // const [items, setItems] = useState([])
-    const [loaded, setLoaded] = useState(false)
+
     // const isSearch = useRef(false)
     // const isMounted = useRef(false)
-    // const [categoryId, setCategoryId] = useState(0)
-    // const [sort, setSort] = useState({
-    //     name: 'популярности',
-    //     sortProperty: '-rating',
-    // })
 
     // const [selectedPage, setSelectedPage] = useState(1)
 
@@ -40,16 +36,9 @@ function Home() {
             const category = categoryId > 0 ? `&category=${categoryId}` : ''
             const search =
                 searchValue.length !== 0 ? `&search=${searchValue}` : ''
-            try {
-                dispatch(fetchProducts({ order, sortBy, category, search }))
-                window.scrollTo(0, 0)
-            } catch (error) {
-                alert(error.message)
-            } finally {
-                setLoaded(true)
-            }
+            dispatch(fetchProducts({ order, sortBy, category, search }))
+            window.scrollTo(0, 0)
         }
-        setLoaded(false)
 
         getProducts()
     }, [categoryId, sort, searchValue])
