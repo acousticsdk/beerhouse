@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProduct } from '../../redux/slices/cartSlice'
+import { selectProductById } from '../../redux/slices/filterSlice'
 
 function ProductBlock({ id, title, price, imageUrl, sizes, types, rating }) {
     const dispatch = useDispatch()
 
-    const cartItem = useSelector((state) =>
-        state.cart.products.find((obj) => obj.id === id)
-    )
+    const cartItem = useSelector(selectProductById(id))
 
     const addedCount = cartItem ? cartItem.count : 0
 

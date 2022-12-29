@@ -22,8 +22,7 @@ function Home() {
 
     const loaded = useSelector((state) => state.products.loaded)
 
-    const { searchValue } = useContext(AppContext)
-
+    const searchValue = useSelector((state) => state.filter.searchValue)
     // const isSearch = useRef(false)
     // const isMounted = useRef(false)
 
